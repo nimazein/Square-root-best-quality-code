@@ -1,0 +1,70 @@
+using System;
+using System.Text.RegularExpressions;
+
+namespace GoodCodeTraining
+{
+    class SquareRoot
+    {
+        const int MAX_POSSIBLE_ACCURANCY = 15;
+        static double InputX(string message)
+        {
+            Console.Write(message);
+            double x;
+            bool isRightInput = false;
+            do
+            {
+                string input = Console.ReadLine();
+                isRightInput = Double.TryParse(input, out x);
+                if (!isRightInput) Console.Write("Введите число: ");
+            } while (!isRightInput);
+            return x;
+        }
+        static bool AccurancyValueCheck(byte decimalPlaces, bool isRightInput, double x)
+        {
+            if (decimalPlaces <= MAX_POSSIBLE_ACCURANCY)
+                isRightInput = true;
+            else
+                Console.Write("Невозможно добиться такой точности.\nПовторите ввод: ");
+            return isRightInput;
+        }
+        static byte AccurancyInput(string message, double x)
+        {
+            Console.Write(message);
+            byte decimalPlaces;
+            bool isRightInput = false;
+            do
+            {
+                string input = Console.ReadLine();
+                if(Byte.TryParse(input, out decimalPlaces))
+                    isRightInput = AccurancyValueCheck(decimalPlaces, isRightInput , x);
+                else
+                    Console.Write("Введите число: ");
+            } while (!isRightInput);
+            return decimalPlaces;
+        }
+        static void InRealNumbersCalculation(double x, int accurancy)
+        {
+            Console.Clear();
+            Console.Write($"\u221A{x} = {Math.Round(Math.Sqrt(x), accurancy)}");
+        }
+        static void InComplexNumberCalculation(double x, int accurancy)
+        {
+            x = Math.Abs(x);
+            Console.Clear();
+            Console.Write($"\u221A{x} = +-{Math.Round(Math.Sqrt(x),accurancy)}i");
+        }
+        static void Main(string[] args)
+        {
+            double x = InputX("Введите число: ");
+            Console.Clear();
+            byte accurancy = AccurancyInput("Необходимая точность: ",x);
+            Console.Clear();
+
+            if (x >= 0)
+                InRealNumbersCalculation(x, accurancy);
+            else
+                InComplexNumberCalculation(x, accurancy);
+            Console.ReadKey();
+        }
+    }
+}
